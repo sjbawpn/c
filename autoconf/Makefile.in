@@ -1,0 +1,16 @@
+CC = @CC@
+
+VERSION= @VERSION@
+CLFAGS = @CFLAGS@
+
+all: test-bin
+
+test-in : test2.c addition.c
+	$(CC) $(CFLAGS) -DVERSION=\"$(VERSION)\" test2.c addition.c -o test
+
+clean:
+	rm -rf test
+
+dclean:
+	rm -rf pi config.* Makefile
+ 
