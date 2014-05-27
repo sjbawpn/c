@@ -9,9 +9,9 @@ struct mystruct {
 const char* str[] = {"Hello","world"};
 int main(int argc, char* argv) {
     struct mystruct stru;
-    stru.mychar = "Hello" "world";
-    stru.mychar = "Hello:" "world";
-    printf("%s\n", stru.mychar);
+    //stru.mychar = "Hello" "world";
+    //stru.mychar = "Hello:" "world";
+    printf("%i\n", stru.mychar == NULL);
     //seti(3);
     //printi();
     //size_t i = sizeof(str);
