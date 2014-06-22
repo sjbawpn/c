@@ -100,15 +100,44 @@ node* ll_del(node* root, int pos) {
     }
     return root ;
 }
-void ll_print(node* root) {
+void llprint(node* root) {
     node* current = root;
     while (current != NULL) {
         printf("current=%i\n",current->value);
         current = current->next;
     }
 }
+
+
+typedef struct linkedlist {
+    node* head;
+    int size;
+} linkedlist;
+
+linkedlist* lladd(linkedlist* list, int data,  int pos) {
+    
+    node** root = &(list->head);
+    if (*root == NULL) {
+        *root = (node*) malloc(sizeof(node*));
+        (*root)->value = data;
+        (*root)->next = NULL;
+
+        return list;
+    }
+    node* current = *root;
+
+    node* n;
+    n = (node*) malloc(sizeof(node*));
+    n->value = data;
+    n->next = NULL;
+}
 int main(int argc, char *argv[]) {
-    node* root = ll_create(2);
+    linkedlist list;
+    list.head = NULL;
+    lladd(&list, 4, 0);
+    printf("%d",(list.head)->value);
+    //llprint(root);
+    /*
     ll_add_last(root, 3);
     ll_add_last(root, 5);
     ll_add_last(root, 4);
@@ -131,4 +160,5 @@ int main(int argc, char *argv[]) {
     root = ll_del(root,5);
     printf("\n");
     ll_print(root);
+    */
 }

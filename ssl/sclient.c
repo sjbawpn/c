@@ -1,8 +1,14 @@
+#define _WIN32_WINNT  0x701 
 #include <stdio.h>
-#include <sys/socket.h>
+#ifdef __MINGW32__
+#include <winsock2.h>
+#include <Ws2tcpip.h>
+#else
+# include <sys/socket.h>
 #include <netinet/in.h>
-#include <sys/types.h>
 #include <netdb.h>
+#endif
+#include <sys/types.h>
 #include <string.h>
 
 // get sockaddr, IPv4 or IPv6:
@@ -63,7 +69,11 @@ int main(int argc, char* argv[]) {
         return 2;
     }
 
+#ifdef __WIN32__
+    //inet_ntop(p->ai_family, get_in_addr((struct sockaddr*) &p->ai_addr), s, sizeof(s));
+#else
     inet_ntop(p->ai_family, get_in_addr((struct sockaddr*) &p->ai_addr), s, sizeof(s));
+#endif 
     //server_address.sin_family = AF_INET;
     //server_address.sin_port = htons(7777);
     //inet_pton(AF_INET, host, &server_address.sin_addr);

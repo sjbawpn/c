@@ -1,12 +1,16 @@
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sys/types.h>
-#include <netdb.h>
-#include <string.h>
-
+#include "common.h"
 // returns socket fd
 int tcp_connect(char* host, char* port) {
+
+#ifdef __WIN32__
+    WSADATA wsaData;
+    int res;
+    if ((res = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0) {
+        printf("WSAStartup failed %d\n", res);
+        return 1;
+        
+    }
+#endif
     struct addrinfo hints, *p, *servinfo;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -36,4 +40,25 @@ int tcp_connect(char* host, char* port) {
         return -2;
     }
     return sockfd;
+}
+
+void check_cert(SSL *ssl, char* host)
+{
+    X509 *peer;
+    char peer_CN[256];
+
+    if(SSL_get_verify_result(ssl) != X509_V_OK)
+        berr_exit("Certificate doesn't verify");
+
+    /* Check the cert chain. The chain length
+    is automatically checked by OpenSSL when
+    we set the verify depth in the ctx */
+
+    /* Check the common name*/
+    peer=SSL_get_peer_certificate(ssl);
+    X509_NAME_get_text_by_NID(X509_get_subject_name(peer), NID_commonName, peer_CN, 256);
+    if(strcasecmp(peer_CN, host))
+        err_exit("Common name doessn't match host name");
+
+
 }

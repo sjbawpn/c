@@ -1,15 +1,4 @@
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sys/types.h>
-#include <netdb.h>
-#include <string.h>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-#include <openssl/bio.h>
-#include <signal.h>
-#include "client.h"
-#define CA_LIST "root.pem"
+#include "common.h"
 
 BIO* bio_err = 0;
 static char *pass;
@@ -32,6 +21,12 @@ int berr_exit(char *string) {
     exit(0);
 }
 
+int err_exit(char *string)
+  {
+    fprintf(stderr,"%s\n",string);
+    exit(0);
+  }
+
 void sigpipe_handle(int x) {
 
 }
@@ -45,9 +40,9 @@ SSL_CTX *initialize_ctx(char* keyfile, char* password) {
         /* An error write context */
         bio_err=BIO_new_fp(stderr, BIO_NOCLOSE);
     }
-
+#ifndef __MINGW32__
     signal(SIGPIPE, sigpipe_handle);
-    
+#endif
     meth = SSLv23_method();
     ctx = SSL_CTX_new(meth);
 
