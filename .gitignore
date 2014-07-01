@@ -1,4 +1,5 @@
 *.out
 *.exe
 *.o
-extlib
+*extlib
+ssl/openssl/extlib
